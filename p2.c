@@ -90,119 +90,75 @@ void test_ins(){//mejorable
 	printf("ordenado? %d\n", ordenado(v, 17));
 }
 
-//TIEMPOS (unificar y pasar por puntero)
+//TIEMPOS
 
-void tiempos_ins1(){
-	int i, j, k = 1000;
-	int v[64000];
-	double antes, despues, t, antesf, despuesf, tf, tf2;
-	printf("\nOrdenacion por insercion con inicializacion ascendente\n");
-	printf("%15s%15s%15s%15s%15s\n", "n", "t(n)", "t(n)/n^0.8", "t(n)/n^1", "t(n)/n^1.2");
-	for (i = 500; i <= 64000; i = i*2) {
-		ascendente(v, i);
-		antes = microsegundos();
-		ordenacionInsercion(v, i);
-		despues = microsegundos();
-		t = despues-antes;
-		if (t<500){
-			antesf= microsegundos();
-			for(j = 0; j < k; j++){
-				ascendente(v, i);
-				ordenacionInsercion(v, i);
-			}
-			despuesf = microsegundos();
-			tf = despuesf - antesf;
-			antesf = microsegundos();
-			for(j = 0; j < k; j++){ //mirar si esta bien manejado esto (eliminar el tiempo de inicializar vectores)
-				ascendente(v, i);
-			}
-			despuesf = microsegundos();
-			tf2 = despuesf - antesf;
-			t = (tf-tf2)/k;
-			printf("%5s%10d%15.3f%15f%15f%15f\n", "(*)", i, t, t/pow(i, 0.8), t/pow(i, 1), t/pow(i, 1.2));
-		}else{
-			printf("%15d%15.3f%15f%15f%15f\n", i, t, t/pow(i, 0.8), t/pow(i, 1), t/pow(i, 1.2));
-		}
-	}
-	printf("Las casillas marcadas con (*) corresponden a un tiempo promedio de K ejecuciones del algoritmo donde k = 1000\n");
+typedef void (*func_vector)(int[], int);
+
+void medir_tiempos(func_vector algoritmo, func_vector inicializar, 
+                   const char *titulo, double cota_sub, double cota_aj, double cota_sob) {
+    int i, j, k = 1000;
+    int v[64000];
+    double antes, despues, t, antesf, despuesf, tf, tf2;
+    char col_sub[20], col_aj[20], col_sob[20];
+
+    // Formateamos los títulos de las columnas dinámicamente según las cotas recibidas
+    sprintf(col_sub, "t(n)/n^%.1f", cota_sub);
+    sprintf(col_aj,  "t(n)/n^%.1f", cota_aj);
+    sprintf(col_sob, "t(n)/n^%.1f", cota_sob);
+
+    printf("\n%s\n", titulo);
+    printf("%15s%15s%15s%15s%15s\n", "n", "t(n)", col_sub, col_aj, col_sob);
+
+    for (i = 500; i <= 64000; i = i * 2) {
+        inicializar(v, i);
+        antes = microsegundos();
+        algoritmo(v, i);
+        despues = microsegundos();
+        t = despues - antes;
+
+        if (t < 500) {
+            antesf = microsegundos();
+            for (j = 0; j < k; j++) {
+                inicializar(v, i);
+                algoritmo(v, i);
+            }
+            despuesf = microsegundos();
+            tf = despuesf - antesf;
+
+            antesf = microsegundos();
+            for (j = 0; j < k; j++) {
+                inicializar(v, i);
+            }
+            despuesf = microsegundos();
+            tf2 = despuesf - antesf;
+
+            t = (tf - tf2) / k;
+            printf("%5s%10d%15.3f%15.6f%15.6f%15.6f\n", "(*)", i, t, 
+                   t / pow(i, cota_sub), t / pow(i, cota_aj), t / pow(i, cota_sob));
+        } else {
+            printf("%15d%15.3f%15.6f%15.6f%15.6f\n", i, t, 
+                   t / pow(i, cota_sub), t / pow(i, cota_aj), t / pow(i, cota_sob));
+        }
+    }
+    printf("Las casillas marcadas con (*) corresponden a un tiempo promedio de K = %d ejecuciones.\n", k);
 }
-
-void tiempos_ins2(){
-	int i, j, k = 1000;
-	int v[64000];
-	double antes, despues, t, antesf, despuesf, tf, tf2;
-	printf("\nOrdenacion por insercion con inicializacion descendente\n");
-	printf("%15s%15s%15s%15s%15s\n", "n", "t(n)", "t(n)/n^1.8", "t(n)/n^2", "t(n)/n^2.2");
-	for (i = 500; i <= 64000; i = i*2) {
-		descendente(v, i);
-		antes = microsegundos();
-		ordenacionInsercion(v, i);
-		despues = microsegundos();
-		t = despues-antes;
-		if (t<500){
-			antesf= microsegundos();
-			for(j = 0; j < k; j++){
-				descendente(v, i);
-				ordenacionInsercion(v, i);
-			}
-			despuesf = microsegundos();
-			tf = despuesf - antesf;
-			antesf = microsegundos();
-			for(j = 0; j < k; j++){
-				descendente(v, i);
-			}
-			despuesf = microsegundos();
-			tf2 = despuesf - antesf;
-			t = (tf-tf2)/k;
-			printf("%5s%10d%15.3f%15f%15f%15f\n", "(*)", i, t, t/pow(i, 1.8), t/pow(i, 2), t/pow(i, 2.2));
-		}else{
-			printf("%15d%15.3f%15f%15f%15f\n", i, t, t/pow(i, 1.8), t/pow(i, 2), t/pow(i, 2.2));
-		}
-	}
-	printf("Las casillas marcadas con (*) corresponden a un tiempo promedio de K ejecuciones del algoritmo donde k = 1000\n");
-}
-
-void tiempos_ins3(){
-	int i, j, k = 1000;
-	int v[64000];
-	double antes, despues, t, antesf, despuesf, tf, tf2;
-	printf("\nOrdenacion por insercion con inicializacion aleatoria\n");
-	printf("%15s%15s%15s%15s%15s\n", "n", "t(n)", "t(n)/n^1.8", "t(n)/n^2", "t(n)/n^2.2");
-	for (i = 500; i <= 64000; i = i*2) {
-		aleatorio(v, i);
-		antes = microsegundos();
-		ordenacionInsercion(v, i);
-		despues = microsegundos();
-		t = despues-antes;
-		if (t<500){
-			antesf= microsegundos();
-			for(j = 0; j < k; j++){
-				aleatorio(v, i);
-				ordenacionInsercion(v, i);
-			}
-			despuesf = microsegundos();
-			tf = despuesf - antesf;
-			antesf = microsegundos();
-			for(j = 0; j < k; j++){
-				aleatorio(v, i);
-			}
-			despuesf = microsegundos();
-			tf2 = despuesf - antesf;
-			t = (tf-tf2)/k;
-			printf("%5s%10d%15.3f%15f%15f%15f\n", "(*)", i, t, t/pow(i, 1.8), t/pow(i, 2), t/pow(i, 2.2));
-		}else{
-			printf("%15d%15.3f%15f%15f%15f\n", i, t, t/pow(i, 1.8), t/pow(i, 2), t/pow(i, 2.2));
-		}
-	}
-	printf("Las casillas marcadas con (*) corresponden a un tiempo promedio de K ejecuciones del algoritmo donde k = 1000\n");
-}
-
 int main()
 {
 	inicializar_semilla();
     test_ins();
-	tiempos_ins1();
-	tiempos_ins2();
-	tiempos_ins3();
+	// 1. Caso mejor (Ascendente) -> Complejidad O(n)
+    medir_tiempos(ordenacionInsercion, ascendente, 
+                  "Ordenacion por insercion con inicializacion ascendente", 
+                  0.8, 1.0, 1.2);
+
+    // 2. Caso peor (Descendente) -> Complejidad O(n^2)
+    medir_tiempos(ordenacionInsercion, descendente, 
+                  "Ordenacion por insercion con inicializacion descendente", 
+                  1.8, 2.0, 2.2);
+
+    // 3. Caso medio (Aleatorio) -> Complejidad O(n^2)
+    medir_tiempos(ordenacionInsercion, aleatorio, 
+                  "Ordenacion por insercion con inicializacion aleatoria", 
+                  1.8, 2.0, 2.2);
     return 0;
 }
