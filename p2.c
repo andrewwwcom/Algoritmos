@@ -5,7 +5,7 @@
 #include <math.h>
 
 void ordenacionInsercion (int v[], int n){
-	int i = 0, j = 0, x;
+	int i, j, x;
     for (i = 1; i <= n-1; i++){
         x = v[i];
         j = i-1;
@@ -53,11 +53,17 @@ for (i=0; i < n; i++)
 v[i] = i;
 }
 
+void descendente(int v [], int n) {
+int i;
+for (i = 0; i < n; i++)
+v[i] = n-i;
+}
+
 //TEST
 
 void test_ins(){
 	int v[1000];
-	printf("Inicializacion aleatoria\n");
+	printf("Inicializacion Aleatoria\n");
 	aleatorio(v, 10);
 	listar_vector(v, 10);
 	printf("ordenado? %d\n", ordenado(v, 10));
@@ -65,6 +71,14 @@ void test_ins(){
 	ordenacionInsercion(v, 10);
 	listar_vector(v, 10);
 	printf("ordenado? %d\n", ordenado(v, 10));
+	printf("Inicializacion Descendente\n");
+	descendente(v, 17);
+	listar_vector(v, 17);
+	printf("ordenado? %d\n", ordenado(v, 17));
+	printf("Ordenacion por Insercion\n");
+	ordenacionInsercion(v, 17);
+	listar_vector(v, 17);
+	printf("ordenado? %d\n", ordenado(v, 17));
 }
 
 int main()
