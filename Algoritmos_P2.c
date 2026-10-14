@@ -1,10 +1,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <math.h>
+#include <sys/time.h>
 
 void inicializar_semilla() {
     srand(time(NULL));
 }
+
+double microsegundos() {
+    struct timeval t;
+    if (gettimeofday(&t, NULL) < 0 )
+        return 0.0;
+    return (t.tv_usec + t.tv_sec * 1000000.0);
+}
+
 void aleatorio(int v [], int n) {/* se generan números pseudoaleatorios entre -n y +n */
     int i, m=2*n+1;
     for (i=0; i < n; i++)
@@ -29,6 +39,18 @@ void mostrarVector(int *v,int n){
         printf("%d ",v[i]);
     }
     printf("\n");
+}
+
+double cota_sobre_al(int n){
+    return pow(n,2.2);    
+}
+
+double cota_sub_al(int n){
+    return pow(n,1.8);    
+}
+
+double cota_aj_al(int n){
+    return n*n;
 }
 
 
@@ -60,8 +82,46 @@ void testInsercion(int *v,int n,void (*vectorCreado)(int *,int)){
     printf("Esta ordenado\n\n");
 }
 
+void tiempos(int *v, int n, void (*vectorCreado)(int *,int),
+double (*cota_sub)(int),double (*cota_aj)(int),double (*cota_sobre)(int)){
+    int i;
+    int iter=1000;
+    double t1,t2,ta,tb,t,x,y,z;
+    vectorCreado(v,n);
+    t1 = microsegundos();
+    ordenacionInsercion(v,n);
+    t2 = microsegundos();
+    t = t2-t1;
+    if (t < 500){ 
+        ta = microsegundos ();
+        for(i=0;i<iter;i++) {
+            vectorCreado(v,n);
+            ordenacionInsercion(v,n);
+        }
+        tb = microsegundos();
+        t1=tb-ta; 
+        ta = microsegundos();
+        for(i=0;i<iter;i++){
+            vectorCreado(v,n);
+        }
+        tb = microsegundos();
+        t2=tb-ta;
+        t=(t1-t2)/iter;
+    }
+    x = t / cota_sub(n);
+    y = t / cota_aj(n);
+    z = t / cota_sobre(n);
+    if(t < 500)
+        printf("%12d%15.4f*%15.8f%15.8f%15.8f\n",n,t, x, y, z);
+ 
+    else printf("%12d%15.4f%15.8f%15.8f%15.8f\n",n,t, x, y, z);  
+    
+}
+    
 int main(){
-    int v[18];
+    int i;
+    int j;
+    int v[32000];
     inicializar_semilla();
     printf("Ordenacion por insercion vector aleatorio\n");
     testInsercion(v,10,aleatorio);
@@ -69,4 +129,10 @@ int main(){
     testInsercion(v,18,ascendente);
     printf("Ordenacion por insercion vector descendente\n");
     testInsercion(v,18,descendente);
+    for(j=0;j<3;j++){
+        for(i=1000;i<=32000;i*=2){
+            tiempos(v,i,aleatorio,cota_sub_al,cota_aj_al,cota_sobre_al);
+        }
+        printf("\n");
+    }
 }
