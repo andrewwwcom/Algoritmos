@@ -70,7 +70,7 @@ v[i] = (rand() % m) - n;
 
 //TEST
 
-void test_ins(){
+void test_ins(){//mejorable
 	int v[1000];
 	printf("Inicializacion Aleatoria\n");
 	aleatorio(v, 10);
@@ -90,38 +90,38 @@ void test_ins(){
 	printf("ordenado? %d\n", ordenado(v, 17));
 }
 
-//TIEMPOS
+//TIEMPOS (unificar y pasar por puntero)
 
 void tiempos_ins1(){
 	int i, j, k = 1000;
 	int v[64000];
-	double antes, despois, t, antesf, despoisf, tf, tf2;
+	double antes, despues, t, antesf, despuesf, tf, tf2;
 	printf("\nOrdenacion por insercion con inicializacion ascendente\n");
-	printf("%15s%15s%15s%15s%15s\n", "n", "t(n)", "t(n)/n^1.8", "t(n)/n^2", "t(n)/n^2.2");
+	printf("%15s%15s%15s%15s%15s\n", "n", "t(n)", "t(n)/n^0.8", "t(n)/n^1", "t(n)/n^1.2");
 	for (i = 500; i <= 64000; i = i*2) {
 		ascendente(v, i);
 		antes = microsegundos();
 		ordenacionInsercion(v, i);
-		despois = microsegundos();
-		t = despois-antes;
+		despues = microsegundos();
+		t = despues-antes;
 		if (t<500){
 			antesf= microsegundos();
-			for(j = k; j >= 0; j--){
+			for(j = 0; j < k; j++){
 				ascendente(v, i);
 				ordenacionInsercion(v, i);
 			}
-			despoisf = microsegundos();
-			tf = despoisf - antesf;
+			despuesf = microsegundos();
+			tf = despuesf - antesf;
 			antesf = microsegundos();
-			for(j = k; j >= 0; j--){
+			for(j = 0; j < k; j++){ //mirar si esta bien manejado esto (eliminar el tiempo de inicializar vectores)
 				ascendente(v, i);
 			}
-			despoisf = microsegundos();
-			tf2 = despoisf - antesf;
+			despuesf = microsegundos();
+			tf2 = despuesf - antesf;
 			t = (tf-tf2)/k;
-			printf("%5s%10d%15.3f%15f%15f%15f\n", "(*)", i, t, t/pow(i, 1.8), t/pow(i, 2), t/pow(i, 2.2));
+			printf("%5s%10d%15.3f%15f%15f%15f\n", "(*)", i, t, t/pow(i, 0.8), t/pow(i, 1), t/pow(i, 1.2));
 		}else{
-			printf("%15d%15.3f%15f%15f%15f\n", i, t, t/pow(i, 1.8), t/pow(i, 2), t/pow(i, 2.2));
+			printf("%15d%15.3f%15f%15f%15f\n", i, t, t/pow(i, 0.8), t/pow(i, 1), t/pow(i, 1.2));
 		}
 	}
 	printf("Las casillas marcadas con (*) corresponden a un tiempo promedio de K ejecuciones del algoritmo donde k = 1000\n");
@@ -130,29 +130,29 @@ void tiempos_ins1(){
 void tiempos_ins2(){
 	int i, j, k = 1000;
 	int v[64000];
-	double antes, despois, t, antesf, despoisf, tf, tf2;
+	double antes, despues, t, antesf, despuesf, tf, tf2;
 	printf("\nOrdenacion por insercion con inicializacion descendente\n");
 	printf("%15s%15s%15s%15s%15s\n", "n", "t(n)", "t(n)/n^1.8", "t(n)/n^2", "t(n)/n^2.2");
 	for (i = 500; i <= 64000; i = i*2) {
 		descendente(v, i);
 		antes = microsegundos();
 		ordenacionInsercion(v, i);
-		despois = microsegundos();
-		t = despois-antes;
+		despues = microsegundos();
+		t = despues-antes;
 		if (t<500){
 			antesf= microsegundos();
-			for(j = k; j >= 0; j--){
+			for(j = 0; j < k; j++){
 				descendente(v, i);
 				ordenacionInsercion(v, i);
 			}
-			despoisf = microsegundos();
-			tf = despoisf - antesf;
+			despuesf = microsegundos();
+			tf = despuesf - antesf;
 			antesf = microsegundos();
-			for(j = k; j >= 0; j--){
+			for(j = 0; j < k; j++){
 				descendente(v, i);
 			}
-			despoisf = microsegundos();
-			tf2 = despoisf - antesf;
+			despuesf = microsegundos();
+			tf2 = despuesf - antesf;
 			t = (tf-tf2)/k;
 			printf("%5s%10d%15.3f%15f%15f%15f\n", "(*)", i, t, t/pow(i, 1.8), t/pow(i, 2), t/pow(i, 2.2));
 		}else{
@@ -165,29 +165,29 @@ void tiempos_ins2(){
 void tiempos_ins3(){
 	int i, j, k = 1000;
 	int v[64000];
-	double antes, despois, t, antesf, despoisf, tf, tf2;
+	double antes, despues, t, antesf, despuesf, tf, tf2;
 	printf("\nOrdenacion por insercion con inicializacion aleatoria\n");
 	printf("%15s%15s%15s%15s%15s\n", "n", "t(n)", "t(n)/n^1.8", "t(n)/n^2", "t(n)/n^2.2");
 	for (i = 500; i <= 64000; i = i*2) {
 		aleatorio(v, i);
 		antes = microsegundos();
 		ordenacionInsercion(v, i);
-		despois = microsegundos();
-		t = despois-antes;
+		despues = microsegundos();
+		t = despues-antes;
 		if (t<500){
 			antesf= microsegundos();
-			for(j = k; j >= 0; j--){
+			for(j = 0; j < k; j++){
 				aleatorio(v, i);
 				ordenacionInsercion(v, i);
 			}
-			despoisf = microsegundos();
-			tf = despoisf - antesf;
+			despuesf = microsegundos();
+			tf = despuesf - antesf;
 			antesf = microsegundos();
-			for(j = k; j >= 0; j--){
+			for(j = 0; j < k; j++){
 				aleatorio(v, i);
 			}
-			despoisf = microsegundos();
-			tf2 = despoisf - antesf;
+			despuesf = microsegundos();
+			tf2 = despuesf - antesf;
 			t = (tf-tf2)/k;
 			printf("%5s%10d%15.3f%15f%15f%15f\n", "(*)", i, t, t/pow(i, 1.8), t/pow(i, 2), t/pow(i, 2.2));
 		}else{
