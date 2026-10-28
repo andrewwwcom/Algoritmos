@@ -179,7 +179,7 @@ double calcular_tiempo(func_vector alg, func_vector ini,
                        int v[], int n, int *prom) {
     int j, k;
     double a, d, t, tf, tf2;
-    k = 1000;
+    k = 10000;
     *prom = 0;
     ini(v, n);
     a = microsegundos();
@@ -253,10 +253,10 @@ void medir_fusion(func_vector alg, func_vector ini, const char *tit) {
             aj = t / (i * log(i));
             sob = t / (i * pow(log(i), 2));
             if (prom) {
-                printf("%5s%10d%15.3f%15.8f%18.8f%20.8f\n",
+                printf("%5s%10d%15.4f%15.8f%18.8f%20.8f\n",
                        "(*)", i, t, sub, aj, sob);
             } else {
-                printf("%15d%15.3f%15.8f%18.8f%20.8f\n",
+                printf("%15d%15.4f%15.8f%18.8f%20.8f\n",
                        i, t, sub, aj, sob);
             }
         }
