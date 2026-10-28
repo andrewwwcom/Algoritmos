@@ -53,7 +53,29 @@ double cota_aj_al(int n){
     return n*n;
 }
 
+double cota_sobre_asc(int n){
+    return pow(n,0.8);    
+}
 
+double cota_sub_asc(int n){
+    return pow(n,1.2);    
+}
+
+double cota_aj_asc(int n){
+    return n;
+}
+
+double cota_sobre_desc(int n){
+    return pow(n,2.2);    
+}
+
+double cota_sub_desc(int n){
+    return pow(n,1.8);    
+}
+
+double cota_aj_desc(int n){
+    return n*n;
+}
 
 
 void ordenacionInsercionAux(int *v,int izq,int der){
@@ -117,10 +139,42 @@ double (*cota_sub)(int),double (*cota_aj)(int),double (*cota_sobre)(int)){
     else printf("%12d%15.4f%15.8f%15.8f%15.8f\n",n,t, x, y, z);  
     
 }
-    
-int main(){
+
+void tablasTiempos(int *v){
     int i;
     int j;
+    printf("Ordenacion por insercion con inicializacion aleatoria\n");
+    for(j=0;j<3;j++){
+        printf("%12s%13s%17s%13s%17s\n\n"
+        ,"n","t(n)","t(n)/n^1.8","t(n)/n^2","t(n)/n^2.2");
+        for(i=1000;i<=32000;i*=2){
+            tiempos(v,i,aleatorio,cota_sub_al,cota_aj_al,cota_sobre_al);
+        }
+        printf("\n");
+    }
+    
+    printf("Ordenacion por insercion con vector ascendente\n");
+    for(j=0;j<3;j++){
+        printf("%12s%13s%17s%13s%18s\n\n"
+        ,"n","t(n)","t(n)/n^0.8","t(n)/n","t(n)/n^1.2");
+        for(i=1000;i<=32000;i*=2){
+            tiempos(v,i,ascendente,cota_sub_asc,cota_aj_asc,cota_sobre_asc);
+        }
+        printf("\n");
+    }
+
+    printf("Ordenacion por insercion con vector descendente\n");
+    for(j=0;j<3;j++){
+        printf("%12s%13s%17s%13s%17s\n\n"
+        ,"n","t(n)","t(n)/n^1.8","t(n)/n^2","t(n)/n^2.2");
+        for(i=1000;i<=32000;i*=2){
+            tiempos(v,i,descendente,cota_sub_desc,cota_aj_desc,cota_sobre_desc);
+        }
+        printf("\n");
+    }
+}
+    
+int main(){
     int v[32000];
     inicializar_semilla();
     printf("Ordenacion por insercion vector aleatorio\n");
@@ -129,10 +183,5 @@ int main(){
     testInsercion(v,18,ascendente);
     printf("Ordenacion por insercion vector descendente\n");
     testInsercion(v,18,descendente);
-    for(j=0;j<3;j++){
-        for(i=1000;i<=32000;i*=2){
-            tiempos(v,i,aleatorio,cota_sub_al,cota_aj_al,cota_sobre_al);
-        }
-        printf("\n");
-    }
+    tablasTiempos(v);
 }
