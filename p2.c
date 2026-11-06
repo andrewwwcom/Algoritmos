@@ -326,5 +326,4 @@ int main(void) {
     medir_fusion(ordenacionFusion_200, aleatorio,
         "Ordenacion por fusion con umbral 200 e inicializacion aleatoria"
         ,32000,8192000);
-    return 0;
-}
+    return 0; }
