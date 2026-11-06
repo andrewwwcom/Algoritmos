@@ -1,0 +1,244 @@
+En este informe comprobamos empíricamente la complejidad de dos algoritmos 
+(ordenación por inserción, ordenación por fusión) implementados en C. 
+Realizamos la comprobación de la complejidad de inserción y fusión para 
+vectores inicializados aleatoriamente, en orden ascendente y en orden 
+descendente.
+En el caso de ordenación por fusión hacemos los cálculos de las 
+complejidades para distintos umbrales, es decir, cuando los subvectores
+obtenidos de las llamadas recursivas de fusión alcanzan el tamaño umbral
+se realizan las ordenaciones restantes con el algoritmo de ordenación por
+inserción.        
+Para cada algoritmo elaboramos sus tablas correspondientes en las que 
+mostramos para cada tamaño de array n; el tiempo de ejecución y las cotas
+(subestimada, ajustada, sobreestimada). 
+
+Características del dispositivo empleado
+
+- Procesador: 12th Gen Intel(R) Core(TM) i5-12500H
+- Sistema Operativo: Ubuntu 24.04.4 LTS
+- Memoria RAM: 16,0 GiB
+
+Leyenda:
+-Unidad de tiempo utilizada: microsegundos (1*10^-6s)
+
+-(*): indica que para tiempos menores a 500 microsegundos fue utilizado un 
+      bucle de 10000 iteraciones para así realizar una media de los tiempos 
+      obtenidos
+
+-@: indica un valor anómalo 
+
+Ordenacion por insercion con inicializacion ascendente
+              n           t(n)     t(n)/n^0.8     t(n)/n^1.0     t(n)/n^1.2
+  (*)      1000         1.2857     0.00511846     0.00128570     0.00032295
+  (*)      2000         2.5699     0.00587614     0.00128495     0.00028098
+  (*)      4000         5.1482     0.00676095     0.00128705     0.00024501
+  (*)      8000        10.2428     0.00772586     0.00128035     0.00021218
+  (*)     16000        20.9902     0.00909328     0.00131189     0.00018927
+  (*)     32000        41.6860     0.01037218     0.00130269     0.00016361
+				  
+                                   C.subest       C.ajust        C.sobreest
+
+Valor al que tiende la cota ajustada: 0.0013
+
+Ordenacion por insercion con inicializacion descendente
+              n           t(n)     t(n)/n^1.8     t(n)/n^2.0     t(n)/n^2.2
+           1000       521.0000     0.00207414     0.00052100     0.00013087
+           2000      1914.0000     0.00218820     0.00047850     0.00010463
+           4000      7760.0000     0.00254773     0.00048500     0.00009233
+           8000     30142.0000     0.00284191     0.00047097     0.00007805
+          16000    120806.0000     0.00327094     0.00047190     0.00006808
+          32000    487695.0000     0.00379209     0.00047626     0.00005982
+
+                                   C.subest       C.ajust        C.sobreest
+
+Valor al que tiende la cota ajustada: 0.00048
+
+Ordenacion por insercion con inicializacion aleatoria
+              n           t(n)     t(n)/n^1.8     t(n)/n^2.0     t(n)/n^2.2
+  (*)      1000       252.1212     0.00100371     0.00025212     0.00006333
+           2000      1017.0000     0.00116270     0.00025425     0.00005560
+           4000      3747.0000     0.00123020     0.00023419     0.00004458
+           8000     14872.0000     0.00140219     0.00023237     0.00003851
+          16000     59714.0000     0.00161681     0.00023326     0.00003365
+          32000    242550.0000     0.00188595     0.00023687     0.00002975
+
+                                   C.subest       C.ajust        C.sobreest
+
+Valor al que tiende la cota ajustada: 0.00023
+
+Ordenacion por fusion con umbral 1 e inicializacion ascendente
+              n           t(n)         t(n)/n    t(n)/(n*ln(n))    t(n)/(n*ln^2(n))
+  (*)      1000        33.1383     0.03313830        0.00479726          0.00069447
+  (*)      2000        69.0622     0.03453110        0.00454303          0.00059770
+  (*)      4000       142.8985     0.03572463        0.00430726          0.00051932
+  (*)      8000       308.9693     0.03862116        0.00429735          0.00047816
+          16000       604.0000     0.03775000(@)     0.00389965          0.00040284
+          32000      1296.0000     0.04050000        0.00390418          0.00037636
+          64000      2704.0000     0.04225000        0.00381778          0.00034498
+         128000      5901.0000     0.04610156        0.00392027          0.00033336
+         256000     12504.0000     0.04884375        0.00392227          0.00031497
+         512000     25593.0000     0.04998633        0.00380238          0.00028924
+
+                                   C.subest          C.ajust             C.sobreest
+
+Valor al que tiende la cota ajustada: 0.0039
+
+Ordenacion por fusion con umbral 1 e inicializacion descendente
+              n           t(n)         t(n)/n    t(n)/(n*ln(n))    t(n)/(n*ln^2(n))
+  (*)      1000        32.8573     0.03285730        0.00475658          0.00068859
+  (*)      2000        68.4335     0.03421675        0.00450167          0.00059225
+  (*)      4000       143.7427     0.03593568        0.00433271          0.00052239
+  (*)      8000       304.4444     0.03805555        0.00423442          0.00047116
+          16000       591.0000     0.03693750(@)     0.00381572          0.00039417
+          32000      1313.0000     0.04103125        0.00395539          0.00038130
+          64000      2745.0000     0.04289063        0.00387567          0.00035021
+         128000      5611.0000     0.04383594        0.00372761          0.00031698
+         256000     12158.0000     0.04749219        0.00381374          0.00030625
+         512000     24512.0000     0.04787500        0.00364177          0.00027702
+
+                                   C.subest          C.ajust             C.sobreest
+
+Valor al que tiende la cota ajustada: 0.0037
+
+Ordenacion por fusion con umbral 1 e inicializacion aleatoria
+              n           t(n)         t(n)/n    t(n)/(n*ln(n))    t(n)/(n*ln^2(n))
+  (*)      1000        74.1863     0.07418630        0.01073957          0.00155471
+  (*)      2000       161.6124     0.08080620        0.01063113          0.00139867
+  (*)      4000       347.8619     0.08696548        0.01048529          0.00126419
+           8000       791.0000     0.09887500        0.01100176          0.00122416
+          16000      1609.0000     0.10056250        0.01038832          0.00107314
+          32000      3323.0000     0.10384375        0.01001049          0.00096501
+          64000      7284.0000     0.11381250        0.01028429          0.00092931
+         128000     15241.0000     0.11907031        0.01012521          0.00086100
+         256000     32133.0000     0.12551953        0.01007952          0.00080941
+         512000     65913.0000     0.12873633        0.00979275          0.00074492
+
+                                   C.subest          C.ajust             C.sobreest
+
+  
+Valor al que tiende la cota ajustada: 0.0100
+
+Ordenacion por fusion con umbral 20 e inicializacion ascendente
+              n           t(n)         t(n)/n    t(n)/(n*ln(n))    t(n)/(n*ln^2(n))
+  (*)      1000        17.2834     0.01728340        0.00250203          0.00036221
+  (*)      2000        40.1320     0.02006600        0.00263995          0.00034732
+  (*)      4000        85.9053     0.02147632        0.00258937          0.00031220
+  (*)      8000       180.6696     0.02258370        0.00251287          0.00027961
+  (*)     16000       392.8614     0.02455384        0.00253646          0.00026202
+          32000       863.0000     0.02696875        0.00259978          0.00025062
+          64000      1833.0000     0.02864062        0.00258801          0.00023386
+         128000      3800.0000     0.02968750        0.00252449          0.00021467
+         256000      8208.0000     0.03206250        0.00257469          0.00020675
+         512000     17329.0000     0.03384570        0.00257459          0.00019584
+
+                                   C.subest          C.ajust             C.sobreest
+
+Valor al que tiende la cota ajustada: 0.0025
+
+Ordenacion por fusion con umbral 20 e inicializacion descendente
+              n           t(n)         t(n)/n    t(n)/(n*ln(n))    t(n)/(n*ln^2(n))
+  (*)      1000        26.3921     0.02639210        0.00382065          0.00055310
+  (*)      2000        56.4397     0.02821985        0.00371270          0.00048845
+  (*)      4000       120.1271     0.03003178        0.00362088          0.00043656
+  (*)      8000       255.1937     0.03189921        0.00354941          0.00039494
+          16000       557.0000     0.03481250        0.00359620          0.00037150
+          32000      1134.0000     0.03543750        0.00341616          0.00032932
+          64000      2310.0000     0.03609375        0.00326149          0.00029471
+         128000      4883.0000     0.03814844        0.00324397          0.00027585
+         256000     10376.0000     0.04053125        0.00325476          0.00026136
+         512000     21485.0000     0.04196289        0.00319205          0.00024281
+
+                                   C.subest          C.ajust             C.sobreest
+
+Valor al que tiende la cota ajustada: 0.0032
+
+Ordenacion por fusion con umbral 20 e inicializacion aleatoria
+              n           t(n)         t(n)/n    t(n)/(n*ln(n))    t(n)/(n*ln^2(n))
+  (*)      1000        58.4129     0.05841290        0.00845613          0.00122415
+  (*)      2000       127.6940     0.06384700        0.00839992          0.00110512
+  (*)      4000       275.6944     0.06892360        0.00831001          0.00100192
+           8000       612.0000     0.07650000        0.00851211          0.00094714
+          16000      1287.0000     0.08043750        0.00830936          0.00085837
+          32000      2844.0000     0.08887500        0.00856751          0.00082590
+          64000      5934.0000     0.09271875        0.00837822          0.00075707
+         128000     12888.0000     0.10068750        0.00856202          0.00072808
+         256000     27069.0000     0.10573828        0.00849103          0.00068185
+         512000     57804.0000     0.11289844        0.00858799          0.00065327
+
+                                   C.subest          C.ajust             C.sobreest
+
+Valor al que tiende la cota ajustada: 0.0085
+
+Ordenacion por fusion con umbral 200 e inicializacion ascendente
+              n           t(n)         t(n)/n    t(n)/(n*ln(n))    t(n)/(n*ln^2(n))
+          32000       625.0000     0.01953125        0.00188280          0.00018150
+          64000      1305.0000     0.02039062        0.00184253          0.00016649
+         128000      2760.0000     0.02156250        0.00183358          0.00015592
+         256000      6134.0000     0.02396094        0.00192412          0.00015451
+         512000     13406.0000     0.02618359        0.00199174          0.00015151
+        1024000     29105.0000     0.02842285        0.00205379          0.00014840
+        2048000     62072.0000     0.03030859        0.00208559          0.00014351
+        4096000    133273.0000     0.03253735        0.00213703          0.00014036
+        8192000    282503.0000     0.03448523        0.00216634          0.00013609
+
+                                   C.subest          C.ajust             C.sobreest
+
+Valor al que tiende la cota ajustada: 0.0021
+
+Ordenacion por fusion con umbral 200 e inicializacion descendente
+              n           t(n)         t(n)/n    t(n)/(n*ln(n))    t(n)/(n*ln^2(n))
+          32000      3013.0000     0.09415625        0.00907662          0.00087498
+          64000      6111.0000     0.09548437        0.00862813          0.00077965
+         128000     12126.0000     0.09473437(@)     0.00805579          0.00068503
+         256000     26168.0000     0.10221875        0.00820841          0.00065915
+         512000     52845.0000     0.10321289        0.00785123          0.00059723
+        1024000    107918.0000     0.10538867        0.00761521          0.00055026
+        2048000    216994.0000     0.10595410        0.00729090          0.00050170
+        4096000    443721.0000     0.10833032        0.00711505          0.00046731
+        8192000    909091.0000     0.11097302        0.00697125          0.00043793
+
+                                   C.subest          C.ajust             C.sobreest
+
+Valor al que tiende la cota ajustada: 0.0069
+
+Ordenacion por fusion con umbral 200 e inicializacion aleatoria
+              n           t(n)         t(n)/n    t(n)/(n*ln(n))    t(n)/(n*ln^2(n))
+          32000      3034.0000     0.09481250        0.00913988          0.00088108
+          64000      6641.0000     0.10376563        0.00937644          0.00084727
+         128000     14406.0000     0.11254688        0.00957049          0.00081383
+         256000     30107.0000     0.11760547        0.00944400          0.00075838
+         512000     63015.0000     0.12307617        0.00936220          0.00071217
+        1024000    132762.0000     0.12965039        0.00936833          0.00067694
+        2048000    280400.0000     0.13691406        0.00942131          0.00064830
+        4096000    588920.0000     0.14377930        0.00944331          0.00062023
+        8192000   1233379.0000     0.15055896        0.00945801          0.00059415
+
+                                   C.subest          C.ajust             C.sobreest
+
+Valor al que tiende la cota ajustada: 0.0094
+
+Las conclusiones obtenidas a partir de este análisis fueron que la 
+ordenación por inserción se ve muy beneficiada si se usa en vectores ya 
+ordenados, obteniendo tiempos muy bajos y una complejidad lineal. En 
+cambio para el vector ordenado descendentemente y el inicializado 
+aleatoriamente obtenemos una complejidad cuadrática, y unos tiempos de 
+ejecución bastante mayores, obteniendo los peores tiempos para el vector
+ordenado descendentemente.
+Para el algoritmo de fusión obtenemos en todos los casos una complejidad
+logarítmica, sin embargo, observamos diferencias en los tiempos en función
+del umbral y el vector. Para el umbral 20 se suelen obtener los mejores
+tiempos, ya que como inserción tiene que realizar cambios en posiciones
+próximas es bastante eficiente. Los siguientes mejores tiempos obtenidos 
+han sido los obtenidos con umbral 1 y los peores obtenidos han sido con
+umbral 200.
+Otros puntos a destacar serían que con inicialización aleatoria se 
+obtienen los peores tiempos en ordenación por fusión, y que al usar 
+fusión con umbral 200 y vector ascendente se obtienen mejores tiempos
+que con los otros umbrales, ya que inserción es muy eficiente con vectores
+ordenados. 
+
+
+
+
+
+
